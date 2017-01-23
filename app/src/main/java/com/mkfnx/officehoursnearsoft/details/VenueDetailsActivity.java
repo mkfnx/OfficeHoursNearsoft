@@ -29,10 +29,5 @@ public class VenueDetailsActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     venueDetailsFragment, R.id.contentFrame);
         }
-
-        new VenueDetailsPresenter(
-                selectedVenue,
-                venueDetailsFragment
-        );
     }
 }
