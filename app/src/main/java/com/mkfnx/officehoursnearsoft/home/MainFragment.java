@@ -16,12 +16,15 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.mkfnx.officehoursnearsoft.OfficeHoursNearsoftApp;
 import com.mkfnx.officehoursnearsoft.R;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.details.VenueDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +36,10 @@ public class MainFragment extends Fragment implements HomeContract.View {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private HomeContract.Presenter presenter;
+    @Inject
+    HomeContract.Presenter presenter;
+    @Inject
+    RequestManager glideRequestManager;
 
     private VenuesAdapter venuesAdapter;
     private VenuesAdapter.VenueItemListener venueItemListener;
@@ -58,6 +64,14 @@ public class MainFragment extends Fragment implements HomeContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        OfficeHoursNearsoftApp app = (OfficeHoursNearsoftApp) getActivity().getApplication();
+
+        DaggerHomeComponent.builder()
+                .applicationComponent( app.getApplicationComponent() )
+                .homeModule(new HomeModule(this))
+                .build()
+                .inject(this);
+
         venueItemListener = new VenuesAdapter.VenueItemListener() {
             @Override
             public void onVenueClick(Venue venueClicked) {
@@ -66,7 +80,7 @@ public class MainFragment extends Fragment implements HomeContract.View {
             }
         };
 
-        venuesAdapter = new VenuesAdapter(new ArrayList<Venue>(0), venueItemListener, Glide.with(this));
+        venuesAdapter = new VenuesAdapter(new ArrayList<Venue>(0), venueItemListener, glideRequestManager);
     }
 
     @Override

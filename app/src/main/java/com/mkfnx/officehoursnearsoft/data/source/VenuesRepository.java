@@ -10,23 +10,10 @@ import java.util.List;
 
 public class VenuesRepository implements VenuesDataSource {
 
-    private static VenuesRepository INSTANCE = null;
-
     private final VenuesDataSource venuesRemoteDataSource;
 
-    private VenuesRepository(VenuesDataSource venuesRemoteDataSource) {
+    public VenuesRepository(VenuesDataSource venuesRemoteDataSource) {
         this.venuesRemoteDataSource = venuesRemoteDataSource;
-    }
-
-    public static VenuesRepository getInstance(VenuesDataSource venuesRemoteDataSource) {
-        if ( INSTANCE == null ) {
-            INSTANCE = new VenuesRepository(venuesRemoteDataSource);
-        }
-        return INSTANCE;
-    }
-    
-    public static void destroyInstance() {
-        INSTANCE = null;
     }
 
     @Override

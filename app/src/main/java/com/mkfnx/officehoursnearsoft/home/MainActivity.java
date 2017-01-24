@@ -8,11 +8,11 @@ import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
 import com.mkfnx.officehoursnearsoft.data.source.remote.VenuesRemoteDataSource;
 import com.mkfnx.officehoursnearsoft.util.ActivityUtils;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private HomeContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +24,5 @@ public class MainActivity extends AppCompatActivity {
             mainFragment = MainFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mainFragment, R.id.contentFrame);
         }
-
-        presenter = new HomePresenter(
-                VenuesRepository.getInstance(VenuesRemoteDataSource.getInstance()),
-                mainFragment
-        );
     }
 }

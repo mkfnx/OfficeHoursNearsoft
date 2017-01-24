@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mkfnx.officehoursnearsoft.OfficeHoursNearsoftApp;
 import com.mkfnx.officehoursnearsoft.R;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.util.ActivityUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +28,8 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
 
     private static final String ARG_SELECTED_VENUE = "SELECTED_VENUE";
 
-    private DetailsContract.Presenter presenter;
+    @Inject
+    DetailsContract.Presenter presenter;
 
     @BindView(R.id.venue_imageview)
     ImageView venueImageView;
@@ -44,12 +48,29 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
 
         VenueDetailsFragment fragment = new VenueDetailsFragment();
         fragment.setArguments(args);
+
         return fragment;
     }
 
     /*
      * Lifecycle
      */
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        OfficeHoursNearsoftApp app = (OfficeHoursNearsoftApp) getActivity().getApplication();
+
+        Venue venue = getArguments().getParcelable(ARG_SELECTED_VENUE);
+
+        DaggerDetailsComponent.builder()
+                .applicationComponent( app.getApplicationComponent() )
+                .detailsModule(new DetailsModule(this, venue))
+                .build()
+                .inject(this);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
