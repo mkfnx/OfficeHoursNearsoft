@@ -9,7 +9,11 @@ import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesDataSource;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,6 +25,7 @@ import retrofit2.Response;
 public class VenuesRemoteDataSource implements VenuesDataSource {
 
     private final static String TAG = VenuesRemoteDataSource.class.getSimpleName();
+    private final static String DEFAULT_LOCATION = "Mexico City";
 
     FoursquareService service;
 
@@ -30,7 +35,7 @@ public class VenuesRemoteDataSource implements VenuesDataSource {
 
     @Override
     public void getVenues(final LoadVenuesCallback loadVenuesCallback) {
-        Call<ExploreVenuesResponse> exploreVenuesResponseCall = service.exploreVenuesNearLocation("Mexico City");
+        Call<ExploreVenuesResponse> exploreVenuesResponseCall = service.exploreVenuesNearLocation(DEFAULT_LOCATION);
 
         exploreVenuesResponseCall.enqueue(new Callback<ExploreVenuesResponse>() {
             @Override
@@ -57,5 +62,22 @@ public class VenuesRemoteDataSource implements VenuesDataSource {
                 loadVenuesCallback.onDataNotAvailable();
             }
         });
+    }
+
+    @Override
+    public Observable<List<Venue>> getVenues() {
+        return service.exploreVenuesNearLocationObs(DEFAULT_LOCATION)
+                .map(new Function<ExploreVenuesResponse, List<Venue>>() {
+                    @Override
+                    public List<Venue> apply(ExploreVenuesResponse exploreVenuesResponse) throws Exception {
+                        ArrayList<Venue> venues = new ArrayList<Venue>();
+
+                        for (ExploreVenuesResponseItem item : exploreVenuesResponse.getResponse().getGroups().get(0).getItems() ) {
+                            venues.add(item.getVenue());
+                        }
+
+                        return venues;
+                    }
+                });
     }
 }

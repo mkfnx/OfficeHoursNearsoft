@@ -1,5 +1,6 @@
 package com.mkfnx.officehoursnearsoft.data;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -14,4 +15,7 @@ public interface FoursquareService {
 
     @GET("venues/explore?v=20161016&venuePhotos=1&client_id=" + CLIENT_ID +  "&client_secret=" + CLIENT_SECRET)
     Call<ExploreVenuesResponse> exploreVenuesNearLocation(@Query("near") String nearLocation);
+
+    @GET("venues/explore?v=20161016&venuePhotos=1&client_id=" + CLIENT_ID +  "&client_secret=" + CLIENT_SECRET)
+    Observable<ExploreVenuesResponse> exploreVenuesNearLocationObs(@Query("near") String nearLocation);
 }

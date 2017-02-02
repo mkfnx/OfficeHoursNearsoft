@@ -8,6 +8,11 @@ import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by mkfnx on 13/01/17.
  */
@@ -27,25 +32,36 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void result(int requestCode, int resultCode) {
-
     }
 
     @Override
     public void loadVenues() {
         view.setLoadingIndicator(true);
-        venuesRepository.getVenues(new VenuesDataSource.LoadVenuesCallback() {
-            @Override
-            public void onVenuesLoaded(List<Venue> venues) {
-                view.setLoadingIndicator(false);
-                view.showVenues(venues);
-            }
 
-            @Override
-            public void onDataNotAvailable() {
-                view.setLoadingIndicator(false);
-                view.showLoadingVenuesError();
-            }
-        });
+        venuesRepository.getVenues()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<List<Venue>>() {
+                            @Override
+                            public void accept(List<Venue> venues) throws Exception {
+                                view.showVenues(venues);
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                view.setLoadingIndicator(false);
+                                view.showLoadingVenuesError();
+                            }
+                        },
+                        new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                view.setLoadingIndicator(false);
+                            }
+                        }
+                );
     }
 
     @Override

@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -28,6 +30,7 @@ public class FoursquareApiModule {
     Retrofit providesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
