@@ -6,6 +6,8 @@ import com.mkfnx.officehoursnearsoft.data.Venue;
 import java.util.List;
 import java.util.Observable;
 
+import io.reactivex.Single;
+
 /**
  * Created by mkfnx on 13/01/17.
  */
@@ -19,5 +21,5 @@ public interface VenuesDataSource {
 
     void getVenues(LoadVenuesCallback loadVenuesCallback);
 
-    io.reactivex.Observable<List<Venue>> getVenues();
+    Single<List<Venue>> getVenues();
 }

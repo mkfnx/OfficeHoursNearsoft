@@ -9,6 +9,8 @@ import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -21,11 +23,16 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final VenuesRepository venuesRepository;
 
-    private final HomeContract.View view;
+    private HomeContract.View view;
 
-    public HomePresenter(VenuesRepository venuesRepository, HomeContract.View view) {
+    private final CompositeDisposable compositeDisposable;
+
+    private Disposable loadVenuesSubscription;
+
+    public HomePresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable) {
         this.venuesRepository = venuesRepository;
         this.view = view;
+        this.compositeDisposable = compositeDisposable;
 
         view.setPresenter(this);
     }
@@ -38,30 +45,20 @@ public class HomePresenter implements HomeContract.Presenter {
     public void loadVenues() {
         view.setLoadingIndicator(true);
 
-        venuesRepository.getVenues()
+        loadVenuesSubscription = venuesRepository.getVenues()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        new Consumer<List<Venue>>() {
-                            @Override
-                            public void accept(List<Venue> venues) throws Exception {
-                                view.showVenues(venues);
-                            }
+                        venues -> {
+                            view.showVenues(venues);
+                            view.setLoadingIndicator(false);
                         },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                view.setLoadingIndicator(false);
-                                view.showLoadingVenuesError();
-                            }
-                        },
-                        new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                view.setLoadingIndicator(false);
-                            }
-                        }
-                );
+                        throwable -> {
+                            view.setLoadingIndicator(false);
+                            view.showLoadingVenuesError();
+                        });
+
+        compositeDisposable.add(loadVenuesSubscription);
     }
 
     @Override
@@ -72,5 +69,11 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void start() {
         loadVenues();
+    }
+
+    @Override
+    public void stop() {
+        compositeDisposable.remove(loadVenuesSubscription);
+        this.view = null;
     }
 }

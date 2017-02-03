@@ -90,6 +90,12 @@ public class MainFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.stop();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

@@ -27,4 +27,9 @@ public class VenueDetailsPresenter implements DetailsContract.Presenter {
     public void start() {
         loadVenueDetails();
     }
+
+    @Override
+    public void stop() {
+        this.view = null;
+    }
 }

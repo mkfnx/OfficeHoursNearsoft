@@ -22,7 +22,7 @@ public interface HomeContract {
 
         void showVenueDetails(Venue venue);
 
-        public void showLoadingVenuesError();
+        void showLoadingVenuesError();
 
         boolean isActive();
     }

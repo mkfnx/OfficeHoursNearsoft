@@ -31,9 +31,6 @@ public class ApplicationModule {
 
     @Provides
     RequestManager providesGlideRequestManager(Context context) {
-        Log.d("provide glide", "context: " + context);
-        RequestManager requestManager = Glide.with(context);
-        Log.d("provide glide", "request manager: " + requestManager);
-        return requestManager;
+        return Glide.with(context);
     }
 }

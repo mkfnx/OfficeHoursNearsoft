@@ -11,9 +11,7 @@ import com.mkfnx.officehoursnearsoft.data.source.VenuesDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,19 +63,10 @@ public class VenuesRemoteDataSource implements VenuesDataSource {
     }
 
     @Override
-    public Observable<List<Venue>> getVenues() {
+    public Single<List<Venue>> getVenues() {
         return service.exploreVenuesNearLocationObs(DEFAULT_LOCATION)
-                .map(new Function<ExploreVenuesResponse, List<Venue>>() {
-                    @Override
-                    public List<Venue> apply(ExploreVenuesResponse exploreVenuesResponse) throws Exception {
-                        ArrayList<Venue> venues = new ArrayList<Venue>();
-
-                        for (ExploreVenuesResponseItem item : exploreVenuesResponse.getResponse().getGroups().get(0).getItems() ) {
-                            venues.add(item.getVenue());
-                        }
-
-                        return venues;
-                    }
-                });
+                .flatMapIterable(exploreVenuesResponse -> exploreVenuesResponse.getResponse().getGroups().get(0).getItems())
+                .map(ExploreVenuesResponseItem::getVenue)
+                .toList();
     }
 }

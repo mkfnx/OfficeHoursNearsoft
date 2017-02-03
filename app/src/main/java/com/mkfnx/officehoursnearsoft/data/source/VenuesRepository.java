@@ -1,11 +1,10 @@
 package com.mkfnx.officehoursnearsoft.data.source;
 
-import com.mkfnx.officehoursnearsoft.data.ExploreVenuesResponse;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by mkfnx on 13/01/17.
@@ -25,7 +24,7 @@ public class VenuesRepository implements VenuesDataSource {
     }
 
     @Override
-    public Observable<List<Venue>> getVenues() {
+    public Single<List<Venue>> getVenues() {
         return venuesRemoteDataSource.getVenues();
     }
 

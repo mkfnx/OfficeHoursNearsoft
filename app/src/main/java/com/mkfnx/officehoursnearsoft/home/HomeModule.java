@@ -7,6 +7,7 @@ import com.mkfnx.officehoursnearsoft.data.source.remote.VenuesRemoteDataSource;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by mkfnx on 20/01/17.
@@ -37,7 +38,12 @@ public class HomeModule {
     }
 
     @Provides
-    HomeContract.Presenter provideHomeContractPresenter(VenuesRepository venuesRepository, HomeContract.View view) {
-        return new HomePresenter(venuesRepository, view);
+    HomeContract.Presenter provideHomeContractPresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable) {
+        return new HomePresenter(venuesRepository, view, compositeDisposable);
+    }
+
+    @Provides
+    CompositeDisposable provideCompositeDisposable() {
+        return new CompositeDisposable();
     }
 }

@@ -87,6 +87,12 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
         presenter.start();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.stop();
+    }
+
     /*
      * View contract
      */
