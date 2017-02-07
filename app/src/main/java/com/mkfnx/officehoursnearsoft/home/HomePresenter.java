@@ -27,8 +27,6 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final CompositeDisposable compositeDisposable;
 
-    private Disposable loadVenuesSubscription;
-
     public HomePresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable) {
         this.venuesRepository = venuesRepository;
         this.view = view;
@@ -45,7 +43,7 @@ public class HomePresenter implements HomeContract.Presenter {
     public void loadVenues() {
         view.setLoadingIndicator(true);
 
-        loadVenuesSubscription = venuesRepository.getVenues()
+        Disposable loadVenuesSubscription = venuesRepository.getVenues()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -73,7 +71,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void stop() {
-        compositeDisposable.remove(loadVenuesSubscription);
+        compositeDisposable.clear();
         this.view = null;
     }
 }
