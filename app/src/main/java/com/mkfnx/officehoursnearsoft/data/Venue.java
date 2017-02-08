@@ -16,6 +16,14 @@ public class Venue implements Parcelable {
     double rating;
     VenueFeaturedPhotos featuredPhotos;
 
+    public Venue(String id, String name, String url, double rating, VenueFeaturedPhotos featuredPhotos) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        this.rating = rating;
+        this.featuredPhotos = featuredPhotos;
+    }
+
     public String getId() {
         return id;
     }

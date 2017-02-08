@@ -4,6 +4,7 @@ import com.mkfnx.officehoursnearsoft.data.FoursquareService;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesDataSource;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
 import com.mkfnx.officehoursnearsoft.data.source.remote.VenuesRemoteDataSource;
+import com.mkfnx.officehoursnearsoft.util.BaseScheduler;
 
 import dagger.Module;
 import dagger.Provides;
@@ -38,8 +39,8 @@ public class HomeModule {
     }
 
     @Provides
-    HomeContract.Presenter provideHomeContractPresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable) {
-        return new HomePresenter(venuesRepository, view, compositeDisposable);
+    HomeContract.Presenter provideHomeContractPresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable, BaseScheduler scheduler) {
+        return new HomePresenter(venuesRepository, view, compositeDisposable, scheduler);
     }
 
     @Provides

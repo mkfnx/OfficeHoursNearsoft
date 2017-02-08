@@ -3,6 +3,7 @@ package com.mkfnx.officehoursnearsoft;
 import com.bumptech.glide.RequestManager;
 import com.mkfnx.officehoursnearsoft.data.FoursquareApiModule;
 import com.mkfnx.officehoursnearsoft.data.FoursquareService;
+import com.mkfnx.officehoursnearsoft.util.BaseScheduler;
 
 import dagger.Component;
 
@@ -15,4 +16,6 @@ public interface ApplicationComponent {
     FoursquareService providesFoursquareService();
 
     RequestManager providesGlideRequestManager();
+
+    BaseScheduler providesBaseScheduler();
 }

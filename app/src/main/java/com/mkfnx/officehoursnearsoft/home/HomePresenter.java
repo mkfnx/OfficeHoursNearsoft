@@ -3,17 +3,11 @@ package com.mkfnx.officehoursnearsoft.home;
 import android.support.annotation.NonNull;
 
 import com.mkfnx.officehoursnearsoft.data.Venue;
-import com.mkfnx.officehoursnearsoft.data.source.VenuesDataSource;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
+import com.mkfnx.officehoursnearsoft.util.BaseScheduler;
 
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mkfnx on 13/01/17.
@@ -27,12 +21,19 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private final CompositeDisposable compositeDisposable;
 
-    public HomePresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable) {
+    private final BaseScheduler scheduler;
+
+    public HomePresenter(VenuesRepository venuesRepository, HomeContract.View view, CompositeDisposable compositeDisposable, BaseScheduler scheduler) {
         this.venuesRepository = venuesRepository;
         this.view = view;
         this.compositeDisposable = compositeDisposable;
+        this.scheduler = scheduler;
 
         view.setPresenter(this);
+    }
+
+    public HomeContract.View getView() {
+        return view;
     }
 
     @Override
@@ -44,8 +45,8 @@ public class HomePresenter implements HomeContract.Presenter {
         view.setLoadingIndicator(true);
 
         Disposable loadVenuesSubscription = venuesRepository.getVenues()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduler.io())
+                .observeOn(scheduler.ui())
                 .subscribe(
                         venues -> {
                             view.showVenues(venues);

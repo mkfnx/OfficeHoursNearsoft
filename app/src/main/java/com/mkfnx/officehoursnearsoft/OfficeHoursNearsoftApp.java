@@ -11,7 +11,7 @@ import com.mkfnx.officehoursnearsoft.home.HomeComponent;
 
 public class OfficeHoursNearsoftApp extends Application {
 
-    final String BASE_URL = "https://api.foursquare.com/v2/";
+    public static final String BASE_URL = "https://api.foursquare.com/v2/";
     private ApplicationComponent applicationComponent;
 
     @Override

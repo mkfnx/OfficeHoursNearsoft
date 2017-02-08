@@ -16,6 +16,11 @@ public class VenueFeaturedPhotos implements Parcelable {
     int count;
     List<VenuePhoto> items;
 
+    public VenueFeaturedPhotos(int count, List<VenuePhoto> items) {
+        this.count = count;
+        this.items = items;
+    }
+
     public int getCount() {
         return count;
     }

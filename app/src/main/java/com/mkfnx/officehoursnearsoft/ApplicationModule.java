@@ -1,12 +1,11 @@
 package com.mkfnx.officehoursnearsoft;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-
-import javax.inject.Singleton;
+import com.mkfnx.officehoursnearsoft.util.BaseScheduler;
+import com.mkfnx.officehoursnearsoft.util.AppScheduler;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,5 +31,10 @@ public class ApplicationModule {
     @Provides
     RequestManager providesGlideRequestManager(Context context) {
         return Glide.with(context);
+    }
+
+    @Provides
+    BaseScheduler providesScheduler() {
+        return new AppScheduler();
     }
 }

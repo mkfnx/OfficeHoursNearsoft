@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class VenuesRemoteDataSource implements VenuesDataSource {
 
     private final static String TAG = VenuesRemoteDataSource.class.getSimpleName();
-    private final static String DEFAULT_LOCATION = "Mexico City";
+    public final static String DEFAULT_LOCATION = "Mexico City";
 
     FoursquareService service;
 

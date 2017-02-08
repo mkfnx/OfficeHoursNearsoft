@@ -14,6 +14,14 @@ public class VenuePhoto implements Parcelable {
     int width;
     int height;
 
+    public VenuePhoto(String id, String prefix, String suffix, int width, int height) {
+        this.id = id;
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.width = width;
+        this.height = height;
+    }
+
     public String getId() {
         return id;
     }
