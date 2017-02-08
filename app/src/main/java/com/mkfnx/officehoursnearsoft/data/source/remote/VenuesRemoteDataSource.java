@@ -9,7 +9,9 @@ import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesDataSource;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,6 +23,7 @@ import retrofit2.Response;
 public class VenuesRemoteDataSource implements VenuesDataSource {
 
     private final static String TAG = VenuesRemoteDataSource.class.getSimpleName();
+    private final static String DEFAULT_LOCATION = "Mexico City";
 
     FoursquareService service;
 
@@ -30,7 +33,7 @@ public class VenuesRemoteDataSource implements VenuesDataSource {
 
     @Override
     public void getVenues(final LoadVenuesCallback loadVenuesCallback) {
-        Call<ExploreVenuesResponse> exploreVenuesResponseCall = service.exploreVenuesNearLocation("Mexico City");
+        Call<ExploreVenuesResponse> exploreVenuesResponseCall = service.exploreVenuesNearLocation(DEFAULT_LOCATION);
 
         exploreVenuesResponseCall.enqueue(new Callback<ExploreVenuesResponse>() {
             @Override
@@ -57,5 +60,13 @@ public class VenuesRemoteDataSource implements VenuesDataSource {
                 loadVenuesCallback.onDataNotAvailable();
             }
         });
+    }
+
+    @Override
+    public Single<List<Venue>> getVenues() {
+        return service.exploreVenuesNearLocationObs(DEFAULT_LOCATION)
+                .flatMapIterable(exploreVenuesResponse -> exploreVenuesResponse.getResponse().getGroups().get(0).getItems())
+                .map(ExploreVenuesResponseItem::getVenue)
+                .toList();
     }
 }

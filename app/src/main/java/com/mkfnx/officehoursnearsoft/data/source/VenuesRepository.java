@@ -4,6 +4,8 @@ import com.mkfnx.officehoursnearsoft.data.Venue;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 /**
  * Created by mkfnx on 13/01/17.
  */
@@ -19,6 +21,11 @@ public class VenuesRepository implements VenuesDataSource {
     @Override
     public void getVenues(LoadVenuesCallback loadVenuesCallback) {
         getVenuesFromRemoteDataSource(loadVenuesCallback);
+    }
+
+    @Override
+    public Single<List<Venue>> getVenues() {
+        return venuesRemoteDataSource.getVenues();
     }
 
     private void getVenuesFromRemoteDataSource(final LoadVenuesCallback loadVenuesCallback) {
