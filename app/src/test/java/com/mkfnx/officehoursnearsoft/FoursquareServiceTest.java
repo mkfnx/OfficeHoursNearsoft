@@ -13,6 +13,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -49,6 +50,7 @@ public class FoursquareServiceTest {
         venuesResponseObservable.subscribe(venuesResponseTestObserver);
 
         venuesResponseTestObserver.assertSubscribed();
+        venuesResponseTestObserver.await(20, TimeUnit.SECONDS);
         venuesResponseTestObserver.assertComplete();
         venuesResponseTestObserver.assertValueCount(1);
         venuesResponseTestObserver.assertValue(exploreVenuesResponse -> {

@@ -43,18 +43,4 @@ public class ActivityUtils {
         transaction.commit();
     }
 
-    public static String buildVenuePhotoUrl(Venue venue) {
-        VenueFeaturedPhotos photos = venue.getFeaturedPhotos();
-
-        if (photos.getCount() > 0) {
-            VenuePhoto venuePhoto = photos.getItems().get(0);
-
-            return venuePhoto.getPrefix()
-                    + venuePhoto.getWidth() + "x" + venuePhoto.getHeight()
-                    + venuePhoto.getSuffix();
-        }
-
-        return null;
-    }
-
 }

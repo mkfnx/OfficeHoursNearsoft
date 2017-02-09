@@ -7,9 +7,13 @@ import com.mkfnx.officehoursnearsoft.data.VenuePhoto;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
 import com.mkfnx.officehoursnearsoft.data.source.remote.VenuesRemoteDataSource;
 
+import junit.framework.Assert;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
@@ -19,7 +23,7 @@ import io.reactivex.Single;
  * Created by mkfnx on 08/02/17.
  */
 
-public class VenuesRepositoryTest extends BaseTest {
+public class VenuesRepositoryTest {
 
     @Mock
     private VenuesRemoteDataSource venuesRemoteDataSource;
@@ -30,9 +34,10 @@ public class VenuesRepositoryTest extends BaseTest {
     private VenueFeaturedPhotos VENUE_FEATURED_PHOTOS;
     private List<Venue> VENUES;
 
-    @Override
+    @Before
     public void setup() throws Exception {
-        super.setup();
+
+        MockitoAnnotations.initMocks(this);
 
         venuesRepository = new VenuesRepository(venuesRemoteDataSource);
 
@@ -48,9 +53,10 @@ public class VenuesRepositoryTest extends BaseTest {
 
     @Test
     public void testGetVenues() throws Exception {
-        Mockito.when(venuesRemoteDataSource.getVenues()).thenReturn(Single.just(VENUES));
+        Single<List<Venue>> listSingle = Single.just(VENUES);
+        Mockito.when(venuesRemoteDataSource.getVenues()).thenReturn(listSingle);
 
-        venuesRepository.getVenues();
+        Assert.assertEquals(listSingle, venuesRepository.getVenues());
 
         Mockito.verify(venuesRemoteDataSource).getVenues();
     }

@@ -1,4 +1,4 @@
-package com.mkfnx.officehoursnearsoft;
+package com.mkfnx.officehoursnearsoft.home;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,28 +7,24 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.RequestManager;
 import com.google.common.collect.Lists;
+import com.mkfnx.officehoursnearsoft.BuildConfig;
+import com.mkfnx.officehoursnearsoft.R;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.data.VenueFeaturedPhotos;
 import com.mkfnx.officehoursnearsoft.data.VenuePhoto;
 import com.mkfnx.officehoursnearsoft.details.VenueDetailsActivity;
-import com.mkfnx.officehoursnearsoft.home.HomeContract;
-import com.mkfnx.officehoursnearsoft.home.MainActivity;
-import com.mkfnx.officehoursnearsoft.home.MainFragment;
-import com.mkfnx.officehoursnearsoft.home.VenuesAdapter;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.robolectric.Robolectric;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Shadows;
-import org.robolectric.ShadowsAdapter;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
-import org.robolectric.util.ActivityController;
 
 import java.util.List;
 
@@ -38,7 +34,7 @@ import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 24)
-public class HomeViewTest extends BaseTest {
+public class HomeViewTest {
 
     @Mock
     private HomeContract.Presenter presenter;
@@ -57,9 +53,9 @@ public class HomeViewTest extends BaseTest {
     private VenueFeaturedPhotos VENUE_FEATURED_PHOTOS;
     private List<Venue> VENUES;
 
-    @Override
+    @Before
     public void setup() throws Exception {
-        super.setup();
+        MockitoAnnotations.initMocks(this);
 
         VENUE_PHOTOS = Lists.newArrayList(
                 new VenuePhoto("VenuePhotoId1", "VenuePhotoPref", "VenuePhotoSuff", 100, 100)
@@ -70,7 +66,7 @@ public class HomeViewTest extends BaseTest {
                 new Venue("VenueId2", "Venue2", "VenueUrl", 10.0, VENUE_FEATURED_PHOTOS)
         );
 
-        mainFragment = new MainFragment();
+        mainFragment = MainFragment.newInstance();
         view = mainFragment;
         SupportFragmentTestUtil.startVisibleFragment(mainFragment);
     }

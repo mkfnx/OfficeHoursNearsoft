@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.mkfnx.officehoursnearsoft.OfficeHoursNearsoftApp;
 import com.mkfnx.officehoursnearsoft.R;
 import com.mkfnx.officehoursnearsoft.data.Venue;
+import com.mkfnx.officehoursnearsoft.data.VenueFeaturedPhotos;
+import com.mkfnx.officehoursnearsoft.data.VenuePhoto;
 import com.mkfnx.officehoursnearsoft.util.ActivityUtils;
 
 import javax.inject.Inject;
@@ -55,7 +57,6 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
     /*
      * Lifecycle
      */
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,11 +107,9 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
         venueTextView.setText(venue.getName());
         venueDescriptionTextView.setText(venue.getUrl());
 
-        String venuePhotoUrl = ActivityUtils.buildVenuePhotoUrl(venue);
-
-        if ( venuePhotoUrl != null ) {
+        if ( venue.getPhotoUrl() != null ) {
             Glide.with(this)
-                    .load(venuePhotoUrl)
+                    .load(venue.getPhotoUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .into(venueImageView);
         }
@@ -119,5 +118,9 @@ public class VenueDetailsFragment extends Fragment implements DetailsContract.Vi
     @Override
     public void setPresenter(DetailsContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    public DetailsContract.Presenter getPresenter() {
+        return presenter;
     }
 }

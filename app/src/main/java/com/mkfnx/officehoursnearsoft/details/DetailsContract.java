@@ -10,7 +10,6 @@ import com.mkfnx.officehoursnearsoft.data.Venue;
 
 public interface DetailsContract {
     interface View extends BaseView<Presenter> {
-//        void setLoadingIndicator(boolean active);
         void showVenueDetails(Venue venue);
     }
 

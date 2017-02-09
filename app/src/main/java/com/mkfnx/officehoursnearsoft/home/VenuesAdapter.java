@@ -92,11 +92,9 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
     }
 
     private void loadVenueImage(Venue venue, ImageView venueImageView) {
-        String venuePhotoUrl = ActivityUtils.buildVenuePhotoUrl(venue);
-
-        if ( venuePhotoUrl != null ) {
+        if ( venue.getPhotoUrl() != null ) {
             glideRequestManager
-                    .load(venuePhotoUrl)
+                    .load(venue.getPhotoUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .into(venueImageView);
         }

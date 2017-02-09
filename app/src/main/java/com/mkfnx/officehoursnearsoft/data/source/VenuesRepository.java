@@ -19,16 +19,7 @@ public class VenuesRepository implements VenuesDataSource {
     }
 
     @Override
-    public void getVenues(LoadVenuesCallback loadVenuesCallback) {
-        getVenuesFromRemoteDataSource(loadVenuesCallback);
-    }
-
-    @Override
     public Single<List<Venue>> getVenues() {
         return venuesRemoteDataSource.getVenues();
-    }
-
-    private void getVenuesFromRemoteDataSource(final LoadVenuesCallback loadVenuesCallback) {
-        venuesRemoteDataSource.getVenues(loadVenuesCallback);
     }
 }

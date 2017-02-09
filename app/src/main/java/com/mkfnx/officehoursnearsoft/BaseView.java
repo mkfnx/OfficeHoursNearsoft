@@ -19,5 +19,4 @@ package com.mkfnx.officehoursnearsoft;
 public interface BaseView<T> {
 
     void setPresenter(T presenter);
-
 }

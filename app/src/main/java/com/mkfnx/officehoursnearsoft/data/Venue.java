@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.mkfnx.officehoursnearsoft.home.MainActivity;
 
+import java.util.List;
+
 /**
  * Created by mkfnx on 13/01/17.
  */
@@ -22,6 +24,18 @@ public class Venue implements Parcelable {
         this.url = url;
         this.rating = rating;
         this.featuredPhotos = featuredPhotos;
+    }
+
+    public String getPhotoUrl() {
+        if (featuredPhotos.getCount() > 0) {
+            VenuePhoto venuePhoto = featuredPhotos.getItems().get(0);
+
+            return venuePhoto.getPrefix()
+                    + venuePhoto.getWidth() + "x" + venuePhoto.getHeight()
+                    + venuePhoto.getSuffix();
+        }
+
+        return null;
     }
 
     public String getId() {

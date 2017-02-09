@@ -1,10 +1,8 @@
 package com.mkfnx.officehoursnearsoft.data.source;
 
-import com.mkfnx.officehoursnearsoft.data.ExploreVenuesResponse;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 
 import java.util.List;
-import java.util.Observable;
 
 import io.reactivex.Single;
 
@@ -13,13 +11,6 @@ import io.reactivex.Single;
  */
 
 public interface VenuesDataSource {
-
-    interface LoadVenuesCallback {
-        void onVenuesLoaded(List<Venue> venues);
-        void onDataNotAvailable();
-    }
-
-    void getVenues(LoadVenuesCallback loadVenuesCallback);
 
     Single<List<Venue>> getVenues();
 }

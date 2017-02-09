@@ -32,4 +32,8 @@ public class VenueDetailsPresenter implements DetailsContract.Presenter {
     public void stop() {
         this.view = null;
     }
+
+    public DetailsContract.View getView() {
+        return view;
+    }
 }

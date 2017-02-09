@@ -1,19 +1,19 @@
-package com.mkfnx.officehoursnearsoft;
+package com.mkfnx.officehoursnearsoft.home;
 
 import com.google.common.collect.Lists;
 import com.mkfnx.officehoursnearsoft.data.Venue;
 import com.mkfnx.officehoursnearsoft.data.VenueFeaturedPhotos;
 import com.mkfnx.officehoursnearsoft.data.VenuePhoto;
 import com.mkfnx.officehoursnearsoft.data.source.VenuesRepository;
-import com.mkfnx.officehoursnearsoft.home.HomeContract;
-import com.mkfnx.officehoursnearsoft.home.HomePresenter;
 import com.mkfnx.officehoursnearsoft.util.BaseScheduler;
 import com.mkfnx.officehoursnearsoft.util.ImmediateScheduler;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by mkfnx on 08/02/17.
  */
 
-public class HomePresenterTest extends BaseTest {
+public class HomePresenterTest {
 
     @Mock
     private HomeContract.View view;
@@ -41,9 +41,10 @@ public class HomePresenterTest extends BaseTest {
     private VenueFeaturedPhotos VENUE_FEATURED_PHOTOS;
     private List<Venue> VENUES;
 
-    @Override
+    @Before
     public void setup() throws Exception {
-        super.setup();
+
+        MockitoAnnotations.initMocks(this);
 
         VENUE_PHOTOS = Lists.newArrayList(
                 new VenuePhoto("VenuePhotoId1", "VenuePhotoPref", "VenuePhotoSuff", 100, 100)
@@ -61,19 +62,16 @@ public class HomePresenterTest extends BaseTest {
         presenter = new HomePresenter(venuesRepository, view, compositeDisposable, scheduler);
     }
 
-//    @Test
-//    public void testStart() throws Exception {
-//        presenter.start();
-//        Assert.assertNotNull(view);
-//    }
+    @Test
+    public void testStart() throws Exception {
+        Mockito.when(venuesRepository.getVenues()).thenReturn(Single.just(VENUES));
+        presenter.start();
+        Assert.assertNotNull(presenter.getView());
+    }
 
     @Test
-    public void testStop() throws Exception {
-        presenter.stop();
-
-//        Mockito.verify(compositeDisposable).clear();
-        Assert.assertNull(presenter.getView());
-//        Assert.assertNull(view);
+    public void testGetView() throws Exception {
+        Assert.assertEquals(view, presenter.getView());
     }
 
     @Test
@@ -86,8 +84,6 @@ public class HomePresenterTest extends BaseTest {
         Mockito.verify(view).setLoadingIndicator(true);
         Mockito.verify(view).showVenues(Mockito.anyList());
         Mockito.verify(view).setLoadingIndicator(false);
-
-//        Mockito.verify(compositeDisposable).add();
     }
 
     @Test
@@ -100,10 +96,6 @@ public class HomePresenterTest extends BaseTest {
         Mockito.verify(view).showLoadingVenuesError();
     }
 
-//    public void testCompositeSubscribed() throws Exception {
-//        Mockito.verify(compositeDisposable);
-//    }
-
     @Test
     public void testOpenVenueDetails() throws Exception {
         Venue venue = VENUES.get(0);
@@ -114,7 +106,9 @@ public class HomePresenterTest extends BaseTest {
     }
 
     @Test
-    public void testGetView() throws Exception {
-        Assert.assertEquals(view, presenter.getView());
+    public void testStop() throws Exception {
+        presenter.stop();
+
+        Assert.assertNull(presenter.getView());
     }
 }
